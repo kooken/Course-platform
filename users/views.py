@@ -2,6 +2,10 @@ from django.contrib.auth.views import LoginView, PasswordResetView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
+
 from config.settings import EMAIL_HOST_USER
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
@@ -9,8 +13,11 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView
 import secrets
 from users.forms import UserRegisterForm, UserProfileForm, UserLoginForm, UserRecoveryForm
-from users.models import User
+from users.models import User, Payments
 import random, string
+
+from users.serializers import PaymentsSerializer
+
 
 def generate_random_password(length=8):
     characters = string.ascii_letters + string.digits + string.punctuation
@@ -79,6 +86,11 @@ class UserPasswordResetView(PasswordResetView):
             recipient_list=[user.email]
         )
         return redirect('users:login')
-from django.shortcuts import render
 
-# Create your views here.
+class PaymentsViewSet(viewsets.ModelViewSet):
+    serializer_class = PaymentsSerializer
+    queryset = Payments.objects.all()
+
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ('paid_lesson', 'paid_course', 'pay_transfer',)
+    ordering_fields = ['pay_date',]
