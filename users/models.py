@@ -12,7 +12,6 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name='почта')
     city = models.CharField(max_length=100, verbose_name='city', **NULLABLE)
-
     token = models.CharField(max_length=100, verbose_name='token', **NULLABLE)
 
     USERNAME_FIELD = "email"

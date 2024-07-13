@@ -18,7 +18,7 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    title = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course title')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course title')
     description = models.TextField(verbose_name='Course description')
     preview = models.ImageField(upload_to='media/', verbose_name='Course image', **NULLABLE)
     link = models.TextField(verbose_name='Lesson link')

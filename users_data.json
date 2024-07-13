@@ -1,0 +1,35 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-07-13T11:32:11.693Z",
+      "phone": null,
+      "avatar": "",
+      "email": "test@example.com",
+      "city": "New York",
+      "token": "abc123",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.payments",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "pay_date": "2024-07-13T11:32:42.692Z",
+      "paid_course": null,
+      "paid_lesson": null,
+      "pay_sum": 1000,
+      "pay_transfer": true
+    }
+  }
+]
