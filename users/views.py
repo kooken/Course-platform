@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, ListAPIView, DestroyAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from config.settings import EMAIL_HOST_USER
 # Create your views here.
@@ -16,7 +18,7 @@ from users.forms import UserRegisterForm, UserProfileForm, UserLoginForm, UserRe
 from users.models import User, Payments
 import random, string
 
-from users.serializers import PaymentsSerializer
+from users.serializers import UserSerializer, PaymentsSerializer
 
 
 def generate_random_password(length=8):
@@ -94,3 +96,47 @@ class PaymentsViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ('paid_lesson', 'paid_course', 'pay_transfer',)
     ordering_fields = ['pay_date',]
+
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+class UserCreateAPIView(CreateAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = (AllowAny, )
+
+    def perform_create(self, serializer):
+        user = serializer.save(is_active=True)
+        user.set_password(user.password)
+        user.save()
+
+
+class UserRegisterView(generics.CreateAPIView):
+    serializer_class = CreateUserSerializer
+    queryset = User.objects.all()
+
+
+class UserRetrieveView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+
+class UserUpdateView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+class UserListView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+class UserDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
