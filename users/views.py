@@ -121,7 +121,7 @@ class UserCreateAPIView(CreateAPIView):
 
 
 class UserRegisterView(CreateAPIView):
-    serializer_class = CreateUserSerializer
+    serializer_class = UserSerializer
     queryset = User.objects.all()
 
 
