@@ -16,7 +16,8 @@ from django.views.generic import CreateView, UpdateView
 import secrets
 from users.forms import UserRegisterForm, UserProfileForm, UserLoginForm, UserRecoveryForm
 from users.models import User, Payments
-import random, string
+import random
+import string
 
 from users.serializers import UserSerializer, PaymentsSerializer
 
@@ -24,6 +25,7 @@ from users.serializers import UserSerializer, PaymentsSerializer
 def generate_random_password(length=8):
     characters = string.ascii_letters + string.digits + string.punctuation
     return ''.join(random.choice(characters) for i in range(length))
+
 
 class RegisterView(CreateView):
     model = User
@@ -47,6 +49,7 @@ class RegisterView(CreateView):
         )
         return super().form_valid(form)
 
+
 def email_verification(request, token):
     user = get_object_or_404(User, token=token)
     user.is_active = True
@@ -62,11 +65,13 @@ class ProfileView(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+
 class UserLoginView(LoginView):
     model = User
     form_class = UserLoginForm
     # redirect_authenticated_user = True
     success_url = reverse_lazy('catalog:home')
+
 
 class UserPasswordResetView(PasswordResetView):
     form_class = UserRecoveryForm
@@ -89,6 +94,7 @@ class UserPasswordResetView(PasswordResetView):
         )
         return redirect('users:login')
 
+
 class PaymentsViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
@@ -96,6 +102,7 @@ class PaymentsViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ('paid_lesson', 'paid_course', 'pay_transfer',)
     ordering_fields = ['pay_date',]
+
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
@@ -113,7 +120,7 @@ class UserCreateAPIView(CreateAPIView):
         user.save()
 
 
-class UserRegisterView(generics.CreateAPIView):
+class UserRegisterView(CreateAPIView):
     serializer_class = CreateUserSerializer
     queryset = User.objects.all()
 
@@ -139,4 +146,3 @@ class UserDeleteView(DestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
     queryset = User.objects.all()
-

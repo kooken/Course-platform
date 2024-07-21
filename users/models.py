@@ -6,6 +6,7 @@ from course.models import Course, Lesson
 NULLABLE = {'null': True,
             'blank': True}
 
+
 class User(AbstractUser):
     phone = models.CharField(max_length=35, verbose_name='phone', **NULLABLE)
     avatar = models.ImageField(upload_to='users/', verbose_name='avatar', **NULLABLE)

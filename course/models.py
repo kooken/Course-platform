@@ -5,6 +5,7 @@ from config.settings import AUTH_USER_MODEL
 NULLABLE = {'null': True,
             'blank': True}
 
+
 # Create your models here.
 class Course(models.Model):
     title = models.CharField(max_length=150, verbose_name='Course title')
@@ -25,13 +26,13 @@ class Lesson(models.Model):
     preview = models.ImageField(upload_to='media/', verbose_name='Course image', **NULLABLE)
     link = models.TextField(verbose_name='Lesson link', **NULLABLE)
 
-
     def __str__(self):
-        return f'{self.title} {self.description}'
+        return f'{self.course} {self.description}'
 
     class Meta:
         verbose_name = 'Lesson'
         verbose_name_plural = 'Lessons'
+
 
 class Subscription(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='User', **NULLABLE)

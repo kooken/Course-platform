@@ -11,7 +11,8 @@ class LessonTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create(email="admin@example.com")
         self.course = Course.objects.create(title="Web dev", description="Brand new course on web dev")
-        self.lesson = Lesson.objects.create(description="First lesson. Introduction.", course=self.course, owner=self.user)
+        self.lesson = Lesson.objects.create(description="First lesson. Introduction.", course=self.course,
+                                            owner=self.user)
         self.client.force_authenticate(user=self.user)
 
     def test_lesson_retrieve(self):
@@ -79,7 +80,7 @@ class LessonTestCase(APITestCase):
                               "description": self.lesson.description,
                               "preview": None,
                               "link": None,
-                              "course": self.course.pk                              }
+                              "course": self.course.pk}
                               ]
                 }
         self.assertEqual(
@@ -105,7 +106,7 @@ class SubscriptionTestCase(APITestCase):
         url = reverse("course:course_subscription")
         data = {"course": self.course.pk}
         Subscription.objects.create(course=self.course, user=self.user)
-        response = self.client.post(url,data)
+        response = self.client.post(url, data)
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data, {'message': 'Subscription disabled'})

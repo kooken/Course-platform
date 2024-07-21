@@ -71,7 +71,6 @@ class SubscriptionCreateAPIView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Subscription.objects.all()
 
-
     def post(self, request, *args, **kwargs):
         user = self.request.user
         course_id = self.request.data.get("course")
