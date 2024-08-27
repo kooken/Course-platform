@@ -1,0 +1,63 @@
+version: "3.12"
+
+services:
+  django:
+    build: .
+    container_name: django
+    command: sh -c 'python manage.py migrate && python manage.py runserver 0.0.0.0:8000'
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - pgdb
+
+  pgdb:
+    image: postgres
+    environment:
+      - POSTGRES_DB=drf
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+    container_name: pgdb
+    volumes:
+      - pgdbdata:/var/lib/postgresql/data/
+
+  redis:
+    image: redis:latest
+    restart: on-failure
+    expose:
+      - '6379'
+
+
+  celery-worker:
+    build: .
+    tty: true
+    restart: on-failure
+    environment:
+      DEBUG: "True"
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+      CELERY_RESULT_BACKEND: "redis://redis:6379/0"
+      DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 [::1]"
+    command: celery -A config worker -l INFO
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - redis
+      - django
+      - pgdb
+
+  celery-beat:
+    build: .
+    volumes:
+      - .:/usr/src/app/
+    environment:
+      DEBUG: "True"
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+      DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 [::1]"
+    restart: on-failure
+    depends_on:
+      - redis
+      - pgdb
+    command: [ "sh", "-c", "celery -A config beat -l INFO && celery -A config -l info -P gevent" ]
+volumes:
+  pgdbdata:
