@@ -15,9 +15,9 @@ services:
   pgdb:
     image: postgres
     environment:
-      - POSTGRES_DB=drf
+      - POSTGRES_DB=drf_project_course
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123
+      - POSTGRES_PASSWORD=4815162342
     container_name: pgdb
     volumes:
       - pgdbdata:/var/lib/postgresql/data/
