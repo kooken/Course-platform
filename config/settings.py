@@ -27,9 +27,9 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = []
+DJANGO_ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS')
 
 # Application definition
 
@@ -144,8 +144,6 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
-
 AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -182,8 +180,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
 
-CELERY_BROKER_URL = os.getenv('BROKER_URL')
-CELERY_RESULT_BACKEND = os.getenv('BROKER_URL')
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
