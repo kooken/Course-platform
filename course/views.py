@@ -34,7 +34,6 @@ class CourseViewSet(ModelViewSet):
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
-    serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated, ~Staff, )
 
     def perform_create(self, serializer):
